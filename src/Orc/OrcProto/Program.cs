@@ -4,15 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using Serilog;
 using System.Threading.Tasks;
+using OrcProto.App;
 
 namespace OrcProto
 {
 	class Program
 	{
-		static async Task<int> Main(string[] args)
+		static async Task Main(string[] args)
 		{
-			Console.WriteLine("Orc prototype");
-
 			ConfigureLogger();
 
 			var container = ContainerConfig.GetContainer();
@@ -21,14 +20,12 @@ namespace OrcProto
 
 			try
 			{
-				var _robot = serviceProvider.GetService<IRobot>();
-				await _robot.DoJobAsync();
-				return 0;
+				var app = serviceProvider.GetService<IOrcApp>();
+				await app.StartAsync(args);
 			}
 			catch (Exception ex)
 			{
 				Log.Fatal(ex, "ORC Proto crushed due to a critical error.");
-				return 1;
 			}
 			finally
 			{
@@ -42,7 +39,6 @@ namespace OrcProto
 				.MinimumLevel.Debug()
 				.WriteTo.File("OrcProto.log")
 				.CreateLogger();
-
 		}
 	}
 }
