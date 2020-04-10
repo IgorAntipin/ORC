@@ -3,14 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Orc.Infrastructure.Interfaces
 {
-	public interface IRobotJobBuilder
+	public interface IInstructionGeneratorQuery <out TResult> : IQuery<TResult>
 	{
-		void UseReader(TextReader textReader);
-
-		Task<IRobotJob> BuildAsync();
+		TextReader Reader { get; set; }
 	}
 }

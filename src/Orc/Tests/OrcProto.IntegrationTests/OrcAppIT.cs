@@ -9,29 +9,51 @@ using NUnit.Framework;
 using Orc.Infrastructure.Interfaces;
 using OrcProto.App;
 using Serilog;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace OrcProto.IntegrationTests
 {
+	[TestFixture]
 	public class OrcAppIT
 	{
+		private IRobotJobBuilder _jobBuilder;
+		private IRobot _robot;
+		private IReportWriter _reportProcessor;
+		private ILogger _logger;
+		private TextWriter _textWriter;
+		private TextReader _textReader;
+
 		[SetUp]
 		public void Setup()
 		{
+			_jobBuilder = A.Fake<IRobotJobBuilder>();
+			_robot = A.Fake<IRobot>();
+			_reportProcessor = A.Fake<IReportWriter>();
+			_logger = A.Fake<ILogger>();
+
+			_textWriter = new StringWriter();
+		}
+
+		[TearDown]
+		public void Cleanup()
+		{
+			if (_textReader != null)
+				_textReader.Dispose();
+
+			if (_textWriter != null)
+				_textWriter.Dispose();
 		}
 
 		[Test]
-		public void Ctor_WithNullJobBuilder_WillThrow()
+		public void Ctor_WhenJobBuilderNull_ShouldThrow()
 		{
 			// Arrange
-			IRobotJobBuilder jobBuilder = null;
-			IRobot robot = A.Fake<IRobot>();
-			IReportProcessor reportProcessor = A.Fake<IReportProcessor>();
-			ILogger logger = A.Fake<ILogger>();
-
+			_jobBuilder = null;
 			// Act
 			Action act = () =>
 			{
-				var app = new OrcApp(jobBuilder, robot, reportProcessor, logger);
+				var app = new OrcApp(_jobBuilder, _robot, _reportProcessor, _logger);
 			};
 
 			// Assert
@@ -41,18 +63,15 @@ namespace OrcProto.IntegrationTests
 		}
 
 		[Test]
-		public void Ctor_WithNullRobot_WillThrow()
+		public void Ctor_WhenRobotNull_ShouldThrow()
 		{
 			// Arrange
-			IRobotJobBuilder jobBuilder = A.Fake<IRobotJobBuilder>();
-			IRobot robot = null;
-			IReportProcessor reportProcessor = A.Fake<IReportProcessor>();
-			ILogger logger = A.Fake<ILogger>();
+			_robot = null;
 
 			// Act
 			Action act = () =>
 			{
-				var app = new OrcApp(jobBuilder, robot, reportProcessor, logger);
+				var app = new OrcApp(_jobBuilder, _robot, _reportProcessor, _logger);
 			};
 
 			// Assert
@@ -62,18 +81,15 @@ namespace OrcProto.IntegrationTests
 		}
 
 		[Test]
-		public void Ctor_WithNullReportProcessor_WillThrow()
+		public void Ctor_WhenReportProcessorNull_ShouldThrow()
 		{
 			// Arrange
-			IRobotJobBuilder jobBuilder = A.Fake<IRobotJobBuilder>();
-			IRobot robot = A.Fake<IRobot>();
-			IReportProcessor reportProcessor = null;
-			ILogger logger = A.Fake<ILogger>();
+			_reportProcessor = null;
 
 			// Act
 			Action act = () =>
 			{
-				var app = new OrcApp(jobBuilder, robot, reportProcessor, logger);
+				var app = new OrcApp(_jobBuilder, _robot, _reportProcessor, _logger);
 			};
 
 			// Assert
@@ -83,18 +99,15 @@ namespace OrcProto.IntegrationTests
 		}
 
 		[Test]
-		public void Ctor_WithNullLogger_WillThrow()
+		public void Ctor_WhenLoggerNull_ShouldThrow()
 		{
 			// Arrange
-			IRobotJobBuilder jobBuilder = A.Fake<IRobotJobBuilder>();
-			IRobot robot = A.Fake<IRobot>();
-			IReportProcessor reportProcessor = A.Fake<IReportProcessor>();
-			ILogger logger = null;
+			_logger = null;
 
 			// Act
 			Action act = () =>
 			{
-				var app = new OrcApp(jobBuilder, robot, reportProcessor, logger);
+				var app = new OrcApp(_jobBuilder, _robot, _reportProcessor, _logger);
 			};
 
 			// Assert
@@ -104,7 +117,24 @@ namespace OrcProto.IntegrationTests
 		}
 
 		[Test]
-		public void DiContainer_HasAllDependencies_ShouldResolveIOrcApp()
+		public void Ctor_WhenArgumentsNoNull_ShouldNotThrow()
+		{
+			// Arrange
+			IOrcApp app = null;
+
+			// Act
+			Action act = () =>
+			{
+				app = new OrcApp(_jobBuilder, _robot, _reportProcessor, _logger);
+			};
+
+			// Assert
+			act.Should().NotThrow();
+			app.Should().NotBeNull();
+		}
+
+		[Test]
+		public void DIContainer_WhenAllDependenciesRegistered_ShouldResolveIOrcApp()
 		{
 			// Arrange
 			IOrcApp app = null;
@@ -122,5 +152,65 @@ namespace OrcProto.IntegrationTests
 			act.Should().NotThrow();
 			app.Should().NotBeNull();
 		}
+
+
+		[Test]
+		public void StartAsync_WhenReaderNull_ShouldThrow()
+		{
+			// Arrange
+			var app = new OrcApp(_jobBuilder, _robot, _reportProcessor, _logger);
+
+			// Act
+			Func<Task> act = async () =>
+			{
+				await app.StartAsync(null, _textWriter);
+			};
+
+			// Assert
+			act.Should().Throw<ArgumentNullException>()
+				.And.Message
+				.Should().Contain("reader");
+		}
+
+		[Test]
+		public void StartAsync_WhenWriterNull_ShouldThrow()
+		{
+			// Arrange
+			var input = "0";
+			_textReader = new StringReader(input);
+			var app = new OrcApp(_jobBuilder, _robot, _reportProcessor, _logger);
+
+			// Act
+			Func<Task> act = async () =>
+			{
+				await app.StartAsync(_textReader, null);
+			};
+
+			// Assert
+			act.Should().Throw<ArgumentNullException>()
+				.And.Message
+				.Should().Contain("writer");
+		}
+
+
+		[Test]
+		public void StartAsync_WhenArgumentsNoNull_ShouldNotThrow()
+		{
+			// Arrange
+			var input = "0";
+			_textReader = new StringReader(input);
+			var app = new OrcApp(_jobBuilder, _robot, _reportProcessor, _logger);
+
+			// Act
+			Func<Task> act = async () =>
+			{
+				await app.StartAsync(_textReader, _textWriter);
+			};
+
+			// Assert
+			act.Should().NotThrow();
+		}
+
+
 	}
 }

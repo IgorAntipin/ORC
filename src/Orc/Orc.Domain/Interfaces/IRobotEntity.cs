@@ -6,5 +6,6 @@ namespace Orc.Domain.Interfaces
 {
 	public interface IRobotEntity
 	{
+		//int Id { get; set; }
 	}
 }

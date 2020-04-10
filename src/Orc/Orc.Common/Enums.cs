@@ -31,5 +31,11 @@ namespace Orc.Common
 			/// </summary>
 			W
 		}
+
+		public enum RobotInstructionStatus
+		{
+			Ok,
+			Error
+		}
 	}
 }

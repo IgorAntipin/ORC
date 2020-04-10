@@ -1,13 +1,13 @@
 ﻿using Orc.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Orc.Infrastructure.Interfaces
 {
-	public interface IReportProcessor
+	public interface IInstructionGeneratorCommand : ICommand
 	{
-		Task ProcessAsync(IRobotReport report);
+		TextReader Reader { get; set; }
 	}
 }

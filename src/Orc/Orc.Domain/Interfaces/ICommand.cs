@@ -5,9 +5,9 @@ using System.Text;
 namespace Orc.Domain.Interfaces
 {
 	/// <summary>
-	/// Interface for a result of execution of IRobotInstruction
+	/// Interface for a command that can be executed by ICommandProcessor
 	/// </summary>
-	public interface IRobotReport
+	public interface ICommand
 	{
 	}
 }

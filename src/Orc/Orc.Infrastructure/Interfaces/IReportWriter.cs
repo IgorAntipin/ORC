@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace Orc.Infrastructure.Interfaces
 {
-	public interface IRobotJobBuilder
+	public interface IReportWriter
 	{
-		void UseReader(TextReader textReader);
-
-		Task<IRobotJob> BuildAsync();
+		void UseTextWriter(TextWriter textWriter);
+		Task WriteAsync(IRobotReport report);
 	}
 }

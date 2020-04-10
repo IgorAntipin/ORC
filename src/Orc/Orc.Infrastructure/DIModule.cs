@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Orc.Infrastructure.Components;
+using Orc.Infrastructure.Core;
 using Orc.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,13 +23,20 @@ namespace Orc.Infrastructure
 				.As<IRobot>()
 				.InstancePerDependency();
 
-			builder.RegisterType<RobotJobBuilder>()
+			builder.RegisterType<CleaningJobBuilder>()
 				.As<IRobotJobBuilder>()
 				.InstancePerDependency();
 
-			builder.RegisterType<ReportProcessor>()
-				.As<IReportProcessor>()
+			builder.RegisterType<ReportWriter>()
+				.As<IReportWriter>()
 				.InstancePerDependency();
+
+
+			builder.RegisterType<Processor>()
+				.As<IQueryProcessor>()
+				.As<ICommandProcessor>()
+				.As<IProcessor>()
+				.InstancePerLifetimeScope();
 
 			base.Load(builder);
 		}

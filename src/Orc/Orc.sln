@@ -7,13 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.Infrastructure", "Orc.I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrcProto", "OrcProto\OrcProto.csproj", "{60B0CBD6-19CC-4F44-A1F6-D1A7FC8BBD74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Common", "Orc.Common\Orc.Common.csproj", "{719C4018-0CF7-49B6-9DA9-2ADC11133532}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.Common", "Orc.Common\Orc.Common.csproj", "{719C4018-0CF7-49B6-9DA9-2ADC11133532}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Domain", "Orc.Domain\Orc.Domain.csproj", "{37E358D6-05B7-4C1D-AB1C-497C14EF8B5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.Domain", "Orc.Domain\Orc.Domain.csproj", "{37E358D6-05B7-4C1D-AB1C-497C14EF8B5D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8825AD34-B095-48B0-8505-F6213FE760C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrcProto.IntegrationTests", "Tests\OrcProto.IntegrationTests\OrcProto.IntegrationTests.csproj", "{60D78CD9-590F-4EDD-9093-9044A041F0BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrcProto.IntegrationTests", "Tests\OrcProto.IntegrationTests\OrcProto.IntegrationTests.csproj", "{60D78CD9-590F-4EDD-9093-9044A041F0BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrcProto.UnitTests", "Tests\OrcProto.UnitTests\OrcProto.UnitTests.csproj", "{45A85299-2026-4975-A7E4-6F44E16ABE02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,12 +43,17 @@ Global
 		{60D78CD9-590F-4EDD-9093-9044A041F0BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60D78CD9-590F-4EDD-9093-9044A041F0BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60D78CD9-590F-4EDD-9093-9044A041F0BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45A85299-2026-4975-A7E4-6F44E16ABE02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45A85299-2026-4975-A7E4-6F44E16ABE02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45A85299-2026-4975-A7E4-6F44E16ABE02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45A85299-2026-4975-A7E4-6F44E16ABE02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{60D78CD9-590F-4EDD-9093-9044A041F0BC} = {8825AD34-B095-48B0-8505-F6213FE760C6}
+		{45A85299-2026-4975-A7E4-6F44E16ABE02} = {8825AD34-B095-48B0-8505-F6213FE760C6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14547746-1FBB-4313-8653-022B9C46BBDF}

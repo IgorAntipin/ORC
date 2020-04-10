@@ -11,8 +11,8 @@ namespace Orc.Infrastructure.Interfaces
 	/// </summary>
 	public interface IRobot
 	{
+		Task<IRobotReport> RunInstructionAsync(IRobotInstruction instruction);
 		Task<bool> AddJobAsync(IRobotJob job);
 		Task RunAllJobsAsync();
-		Task<IRobotReport> GetReportAsync(Guid jobId);
 	}
 }

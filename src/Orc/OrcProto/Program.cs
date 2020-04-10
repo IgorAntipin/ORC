@@ -21,7 +21,7 @@ namespace OrcProto
 			try
 			{
 				var app = serviceProvider.GetService<IOrcApp>();
-				await app.StartAsync(args);
+				await app.StartAsync(Console.In, Console.Out);
 			}
 			catch (Exception ex)
 			{

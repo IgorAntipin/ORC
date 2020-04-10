@@ -1,16 +1,16 @@
 ﻿using Orc.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Orc.Infrastructure.Interfaces
 {
-	public interface IRobotJobBuilder
+	public interface IJobStore
 	{
-		void UseReader(TextReader textReader);
+		Task AddJobAsync(IRobotJob job);
 
-		Task<IRobotJob> BuildAsync();
+		Task<IRobotJob> GetNextJobAsync();
+
 	}
 }
