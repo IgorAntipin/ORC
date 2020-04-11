@@ -95,7 +95,7 @@ namespace OrcProto.IntegrationTests
 			// Assert
 			act.Should().Throw<ArgumentNullException>()
 				.And.Message
-				.Should().Contain("reportProcessor");
+				.Should().Contain("reportWriter");
 		}
 
 		[Test]

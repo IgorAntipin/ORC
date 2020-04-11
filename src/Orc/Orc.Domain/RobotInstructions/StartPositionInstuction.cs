@@ -1,4 +1,5 @@
-﻿using Orc.Domain.Interfaces;
+﻿using Orc.Common.Types;
+using Orc.Domain.Interfaces;
 using Orc.Domain.Reports;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,6 @@ namespace Orc.Domain.RobotInstructions
 {
 	public class StartPositionInstuction : BaseRobotInstruction<StatusReport>
 	{
-		public int X { get; set; }
-		public int Y { get; set; }
+		public Vector2d AbsolutePosition { get; set; }
 	}
 }

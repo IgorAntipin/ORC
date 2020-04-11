@@ -10,9 +10,9 @@ namespace Orc.Infrastructure.Services
 	public class ControllerFacade : IControllerFacade
 	{
 		private readonly IRobotStore _store;
-		private readonly IPathValidationService _validator;
+		private readonly INavigationService _validator;
 
-		public ControllerFacade(IRobotStore store, IPathValidationService validator)
+		public ControllerFacade(IRobotStore store, INavigationService validator)
 		{
 			_store = store ?? throw new ArgumentNullException(nameof(store));
 			_validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -41,7 +41,7 @@ namespace Orc.Infrastructure.Services
 
 			var next = position + relative;
 
-			var canMove = await _validator.CheckMoveAsync(position, next);
+			var canMove = await _validator.CheckPathAsync(position, next);
 			if(!canMove)
 			{
 				throw new InvalidOperationException($"Failed to find path form {position} to {next}.");

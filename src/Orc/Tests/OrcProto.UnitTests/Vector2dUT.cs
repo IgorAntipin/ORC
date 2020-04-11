@@ -19,13 +19,13 @@ namespace OrcProto.UnitTests
 		{
 		}
 
-		public class SumTestCase
+		public class ArithmeticTestCase
 		{
 			public Vector2d A { get; set; }
 			public Vector2d B { get; set; }
 			public Vector2d Result { get; set; }
 
-			public SumTestCase(Vector2d a, Vector2d b, Vector2d result)
+			public ArithmeticTestCase(Vector2d a, Vector2d b, Vector2d result)
 			{
 				A = a;
 				B = b;
@@ -33,23 +33,23 @@ namespace OrcProto.UnitTests
 			}
 		}
 
-		private static IEnumerable<SumTestCase> SumTestCases()
+		private static IEnumerable<ArithmeticTestCase> SumTestCases()
 		{
 			
-			yield return new SumTestCase(Vector2d.ZERO, Vector2d.ZERO, Vector2d.ZERO);
-			yield return new SumTestCase(Vector2d.ZERO, Vector2d.NORTH, Vector2d.NORTH);
-			yield return new SumTestCase(Vector2d.ZERO, Vector2d.SOUTH, Vector2d.SOUTH);
-			yield return new SumTestCase(Vector2d.ZERO, Vector2d.WEST, Vector2d.WEST);
-			yield return new SumTestCase(Vector2d.ZERO, Vector2d.EAST, Vector2d.EAST);
-			yield return new SumTestCase(Vector2d.NORTH, Vector2d.SOUTH, Vector2d.ZERO);
-			yield return new SumTestCase(Vector2d.WEST, Vector2d.EAST, Vector2d.ZERO);
-			yield return new SumTestCase(new Vector2d(13,6), new Vector2d(-4, 1), new Vector2d(9,7));
-			yield return new SumTestCase(new Vector2d(int.MaxValue, int.MinValue), new Vector2d(1, -1), new Vector2d(int.MinValue, int.MaxValue));
-			yield return new SumTestCase(new Vector2d(int.MaxValue, 0), new Vector2d(1, 0), new Vector2d(int.MinValue, 0));
+			yield return new ArithmeticTestCase(Vector2d.ZERO, Vector2d.ZERO, Vector2d.ZERO);
+			yield return new ArithmeticTestCase(Vector2d.ZERO, Vector2d.NORTH, Vector2d.NORTH);
+			yield return new ArithmeticTestCase(Vector2d.ZERO, Vector2d.SOUTH, Vector2d.SOUTH);
+			yield return new ArithmeticTestCase(Vector2d.ZERO, Vector2d.WEST, Vector2d.WEST);
+			yield return new ArithmeticTestCase(Vector2d.ZERO, Vector2d.EAST, Vector2d.EAST);
+			yield return new ArithmeticTestCase(Vector2d.NORTH, Vector2d.SOUTH, Vector2d.ZERO);
+			yield return new ArithmeticTestCase(Vector2d.WEST, Vector2d.EAST, Vector2d.ZERO);
+			yield return new ArithmeticTestCase(new Vector2d(13,6), new Vector2d(-4, 1), new Vector2d(9,7));
+			yield return new ArithmeticTestCase(new Vector2d(int.MaxValue, int.MinValue), new Vector2d(1, -1), new Vector2d(int.MinValue, int.MaxValue));
+			yield return new ArithmeticTestCase(new Vector2d(int.MaxValue, 0), new Vector2d(1, 0), new Vector2d(int.MinValue, 0));
 		}
 
 		[Test, TestCaseSource(nameof(SumTestCases))]
-		public void Vector2d_SumTest(SumTestCase testCase)
+		public void Vector2d_SumTest(ArithmeticTestCase testCase)
 		{
 			// Arrange		
 			Vector2d? sum = null;
@@ -58,6 +58,40 @@ namespace OrcProto.UnitTests
 			Action act = () =>
 			{
 				sum = testCase.A + testCase.B;
+			};
+
+			// Assert
+			act.Should().NotThrow();
+			sum.Should().NotBeNull().And.Be(testCase.Result);
+		}
+
+		private static IEnumerable<ArithmeticTestCase> SubTestCases()
+		{
+
+			yield return new ArithmeticTestCase(Vector2d.ZERO, Vector2d.ZERO, Vector2d.ZERO);
+			yield return new ArithmeticTestCase(Vector2d.ZERO, Vector2d.NORTH, Vector2d.SOUTH);
+			yield return new ArithmeticTestCase(Vector2d.ZERO, Vector2d.SOUTH, Vector2d.NORTH);
+			yield return new ArithmeticTestCase(Vector2d.ZERO, Vector2d.WEST, Vector2d.EAST);
+			yield return new ArithmeticTestCase(Vector2d.ZERO, Vector2d.EAST, Vector2d.WEST);
+			yield return new ArithmeticTestCase(Vector2d.NORTH, Vector2d.SOUTH, new Vector2d(0, 2));
+			yield return new ArithmeticTestCase(Vector2d.SOUTH, Vector2d.NORTH, new Vector2d(0, -2));
+			yield return new ArithmeticTestCase(Vector2d.WEST, Vector2d.EAST, new Vector2d(-2, 0));
+			yield return new ArithmeticTestCase(Vector2d.EAST, Vector2d.WEST, new Vector2d(2, 0));
+			yield return new ArithmeticTestCase(new Vector2d(13, 6), new Vector2d(-4, 1), new Vector2d(17, 5));
+			yield return new ArithmeticTestCase(new Vector2d(int.MinValue, int.MaxValue), new Vector2d(1, -1), new Vector2d(int.MaxValue, int.MinValue));
+			yield return new ArithmeticTestCase(new Vector2d(int.MaxValue, 0), new Vector2d(-1, 0), new Vector2d(int.MinValue, 0));
+		}
+
+		[Test, TestCaseSource(nameof(SubTestCases))]
+		public void Vector2d_SubTest(ArithmeticTestCase testCase)
+		{
+			// Arrange		
+			Vector2d? sum = null;
+
+			// Act
+			Action act = () =>
+			{
+				sum = testCase.A - testCase.B;
 			};
 
 			// Assert

@@ -12,12 +12,6 @@ namespace Orc.Common.Types
 			Y = y;
 		}
 
-		public Vector2d(Vector2d src)
-		{
-			X = src.X;
-			Y = src.Y;
-		}
-
 		public readonly int X;
 		public readonly int Y;
 
@@ -25,19 +19,17 @@ namespace Orc.Common.Types
 		{
 			unchecked
 			{
-				//long hash = 2;
-				//hash ^= X + 2654435769 + (hash << 6) + (hash >> 2);
-				//hash ^= Y + 2654435769 + (hash << 6) + (hash >> 2);
 
-				//int h = (int)hash ^ (int)(hash >> 32);
-				//return h;
+				int hash = 17;
+				// Suitable nullity checks etc, of course :)
+				hash = hash * 486187739 + X;
+				hash = hash * 486187739 + Y;
 
-				int hash = 2166113;
-				hash = hash * 16777619 ^ X;
-				hash = hash * 16777619 ^ Y;
+				//int hash = 2166113;
+				//hash = hash * 16777619 ^ X;
+				//hash = hash * 16777619 ^ Y;
 
-				return hash;
-				
+				return hash;				
 			}
 		}
 

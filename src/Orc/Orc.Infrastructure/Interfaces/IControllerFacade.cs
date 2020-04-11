@@ -8,9 +8,17 @@ namespace Orc.Infrastructure.Interfaces
 {
 	public interface IControllerFacade
 	{
+		/// <summary>
+		/// Get the absolute coordinates of the current position of the robot
+		/// </summary>
+		/// <returns></returns>
 		Task<Vector2d> GetCurrentPositionAsync();
 
-
+		/// <summary>
+		/// Move to specified relative coordinates
+		/// </summary>
+		/// <param name="relative"></param>
+		/// <returns></returns>
 		Task MoveToAsync(Vector2d relative);
 
 		/// <summary>

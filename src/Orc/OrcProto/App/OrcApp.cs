@@ -65,7 +65,7 @@ namespace OrcProto.App
 
 			_logger.Information("OrcApp report generation started.");
 
-			var reportInstruction = new CreateJobReport();
+			var reportInstruction = new CreateJobReportInstruction();
 			reportInstruction.JobId = job.Id;
 
 			var report = await _robot.RunInstructionAsync(reportInstruction);

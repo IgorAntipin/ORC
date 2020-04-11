@@ -52,5 +52,14 @@ namespace Orc.Infrastructure.Components
 				var report = await RunInstructionAsync(instruction);
 			}
 		}
+
+		private async Task<IRobotReport> ExecuteAsync(IRobotInstruction instruction)
+		{
+			var query = instruction as IQuery<IRobotReport>;
+			
+			var result =  await _processor.ExecuteAsync(query);
+
+			return result;
+		}
 	}
 }

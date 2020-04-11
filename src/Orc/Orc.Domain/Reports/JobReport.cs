@@ -10,6 +10,6 @@ namespace Orc.Domain.Reports
 		/// <summary>
 		/// Number of unique cleaned vertices
 		/// </summary>
-		public uint UniqueCleanedVerticesCount { get; set; }
+		public int UniqueCleanedVerticesCount { get; set; }
 	}
 }

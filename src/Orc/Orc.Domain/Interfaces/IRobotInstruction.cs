@@ -10,5 +10,6 @@ namespace Orc.Domain.Interfaces
 	/// <typeparam name="TResult"></typeparam>
 	public interface IRobotInstruction
 	{
+
 	}
 }

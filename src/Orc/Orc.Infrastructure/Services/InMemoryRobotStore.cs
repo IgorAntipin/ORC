@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Orc.Infrastructure.Services
 {
+	/// <summary>
+	/// Not persistent storage
+	/// </summary>
 	public class InMemoryRobotStore : IRobotStore
 	{
 		private Vector2d _currentPosition;

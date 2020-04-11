@@ -15,14 +15,14 @@ namespace OrcProto.UnitTests
 	public class ControllerFacadeUT
 	{
 		private IRobotStore _store;
-		private IPathValidationService _validator;
+		private INavigationService _validator;
 		private IControllerFacade _facade;
 
 		[SetUp]
 		public void Setup()
 		{
 			_store = A.Fake<IRobotStore>();
-			_validator = A.Fake<IPathValidationService>();
+			_validator = A.Fake<INavigationService>();
 
 			_facade = new ControllerFacade(_store, _validator);
 		}
@@ -79,7 +79,7 @@ namespace OrcProto.UnitTests
 		public void MoveToAsync_WhenPathNotValid_ShouldThrow()
 		{
 			// Arrange
-			var checkMoveMethod = A.CallTo(() => _validator.CheckMoveAsync(A<Vector2d>._, A<Vector2d>._));
+			var checkMoveMethod = A.CallTo(() => _validator.CheckPathAsync(A<Vector2d>._, A<Vector2d>._));
 			checkMoveMethod.Returns(false);
 
 			var relative = new Vector2d(1, 3);
@@ -104,7 +104,7 @@ namespace OrcProto.UnitTests
 		public void MoveToAsync_WhenPathValid_ShouldNotThrow()
 		{
 			// Arrange
-			var checkMoveMethod = A.CallTo(() => _validator.CheckMoveAsync(A<Vector2d>._, A<Vector2d>._));
+			var checkMoveMethod = A.CallTo(() => _validator.CheckPathAsync(A<Vector2d>._, A<Vector2d>._));
 			checkMoveMethod.Returns(true);
 
 			var relative = new Vector2d(1, 3);
@@ -148,7 +148,7 @@ namespace OrcProto.UnitTests
 		public void MoveToAsync_WhenPathValid_ShouldMoveToRelativePosition(RelativePositionTestCase testCase)
 		{
 			// Arrange
-			var checkMoveMethod = A.CallTo(() => _validator.CheckMoveAsync(A<Vector2d>._, A<Vector2d>._));
+			var checkMoveMethod = A.CallTo(() => _validator.CheckPathAsync(A<Vector2d>._, A<Vector2d>._));
 			checkMoveMethod.Returns(true);
 
 			var getCurrentPositionMethod = A.CallTo(() => _store.GetCurrentPositionAsync());
@@ -175,7 +175,7 @@ namespace OrcProto.UnitTests
 			// Arrange
 			var relative = new Vector2d(0, 0);
 
-			var checkMoveMethod = A.CallTo(() => _validator.CheckMoveAsync(A<Vector2d>._, A<Vector2d>._));
+			var checkMoveMethod = A.CallTo(() => _validator.CheckPathAsync(A<Vector2d>._, A<Vector2d>._));
 			var getCurrentPositionMethod = A.CallTo(() => _store.GetCurrentPositionAsync());
 			var updateCurrentPositionMethod = A.CallTo(() => _store.UpdateCurrentPositionAsync(A<Vector2d>._));
 
