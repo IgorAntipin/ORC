@@ -19,15 +19,9 @@ namespace Orc.Common.Types
 		{
 			unchecked
 			{
-
 				int hash = 17;
-				// Suitable nullity checks etc, of course :)
 				hash = hash * 486187739 + X;
 				hash = hash * 486187739 + Y;
-
-				//int hash = 2166113;
-				//hash = hash * 16777619 ^ X;
-				//hash = hash * 16777619 ^ Y;
 
 				return hash;				
 			}
@@ -40,7 +34,7 @@ namespace Orc.Common.Types
 
 		public bool Equals(Vector2d other)
 		{
-			return this.X == other.X && this.Y == other.Y;
+			return this == other;
 		}
 
 		public override bool Equals(object obj)

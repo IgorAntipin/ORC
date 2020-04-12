@@ -6,6 +6,16 @@ namespace Orc.Common.Types
 {
 	public readonly partial struct Vector2d
 	{
+		public static bool operator ==(Vector2d a, Vector2d b)
+		{
+			return a.X == b.X && a.Y == b.Y;
+		}
+
+		public static bool operator !=(Vector2d a, Vector2d b)
+		{
+			return !(a == b);
+		}
+
 		public static Vector2d operator +(Vector2d a, Vector2d b)
 		{
 			unchecked

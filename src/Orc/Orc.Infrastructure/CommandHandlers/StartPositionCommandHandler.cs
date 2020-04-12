@@ -1,4 +1,5 @@
-﻿using Orc.Domain.Commands;
+﻿using Orc.Common.Types;
+using Orc.Domain.Commands;
 using Orc.Infrastructure.Core;
 using Orc.Infrastructure.Interfaces;
 using System;
@@ -22,8 +23,9 @@ namespace Orc.Infrastructure.CommandHandlers
 			var current = await _controllerFacade.GetCurrentPositionAsync();
 			var dest = command.AbsolutePosition;
 			var offset = dest - current;
-
-			await _controllerFacade.MoveToAsync(offset);
+			
+			if(offset != Vector2d.ZERO)
+				await _controllerFacade.MoveToAsync(offset);
 			
 			if(command.CleanInPosition)
 				await _controllerFacade.CleanAsync();

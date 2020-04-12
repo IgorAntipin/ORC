@@ -104,7 +104,7 @@ namespace OrcProto.UnitTests
 		[TestCase(100)]
 		[TestCase(1000)]
 		[TestCase(10000)]
-		public void Vector2d_HashCollisionTest(int limit)
+		public void Vector2d_HashCollisionRatioDoesNotExceed2x(int limit)
 		{
 			// Arrange
 			int max = (limit * 2 + 1) * (limit * 2 + 1);
@@ -122,8 +122,52 @@ namespace OrcProto.UnitTests
 				}
 			}
 
+			var ratio = (double) max / hashset.Count;
+
 			// Assert
 			hashset.Count.Should().BeGreaterThan(half);
+			ratio.Should().BeInRange(1.0, 2.0);
+		}
+
+		public class EqualityTestCase
+		{
+			public Vector2d A { get; set; }
+			public Vector2d B { get; set; }
+			public bool Expected { get; set; }
+
+			public EqualityTestCase(Vector2d a, Vector2d b, bool expected)
+			{
+				A = a;
+				B = b;
+				Expected = expected;
+			}
+		}
+
+		public static IEnumerable<EqualityTestCase> EqualityTestCases()
+		{
+			yield return new EqualityTestCase(Vector2d.ZERO, Vector2d.ZERO, true);
+			yield return new EqualityTestCase(Vector2d.NORTH, Vector2d.NORTH, true);
+			yield return new EqualityTestCase(Vector2d.ZERO, Vector2d.NORTH, false);
+			yield return new EqualityTestCase(Vector2d.NORTH, Vector2d.ZERO, false);
+			yield return new EqualityTestCase(new Vector2d(10,-6), new Vector2d(10, -6), true);
+			yield return new EqualityTestCase(new Vector2d(-6, 10), new Vector2d(10, -6), false);
+		}
+
+		[Test, TestCaseSource("EqualityTestCases")]
+		public void Vector2d_EqualityTest(EqualityTestCase testCase)
+		{
+			// Arrange
+			bool? result = null;
+			// Act
+			Action act = () =>
+			{
+				result = testCase.A == testCase.B;
+			};
+
+			// Assert
+			act.Should().NotThrow();
+			result.Should().Be(testCase.Expected);
+
 		}
 	}
 }

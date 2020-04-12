@@ -34,7 +34,7 @@ namespace Orc.Infrastructure.Services
 
 		public async Task MoveToAsync(Vector2d relative)
 		{
-			if (relative.Equals(Vector2d.ZERO))
+			if (relative == Vector2d.ZERO)
 				return;
 
 			var position = await GetCurrentPosAsync();

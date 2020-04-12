@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 namespace OrcProto.UnitTests
 {
     [TestFixture]
-    public class CommandHandlersUT
+    public class MoveAndCleanCommandHandlerUT
     {
 
         [Test]
-        public void Ctor_MoveAndCleanCommandHandler_WhenControllerFacadeNull_ShouldThrow()
+        public void Ctor_WhenControllerFacadeNull_ShouldThrow()
         {
             // Arrange
             IControllerFacade facade = null;
@@ -34,7 +34,7 @@ namespace OrcProto.UnitTests
         }
 
         [Test]
-        public void Ctor_MoveAndCleanCommandHandler_WhenArgumentsNotNull_ShouldNotThrow()
+        public void Ctor_WhenArgumentsNotNull_ShouldNotThrow()
         {
             // Arrange
             IControllerFacade facade = A.Fake<IControllerFacade>();
@@ -66,7 +66,7 @@ namespace OrcProto.UnitTests
         }
 
         [Test, TestCaseSource("DirectionTestCases")]
-        public void MoveAndCleanCommandHandler_ShouldCallMoveToInGivenDirrection(DirectionTestCase testCase)
+        public void HandleAsync_ShouldCallMoveToInGivenDirrection(DirectionTestCase testCase)
         {
             // Arrange
             int steps = 3;
@@ -88,7 +88,7 @@ namespace OrcProto.UnitTests
         }
 
         [Test]
-        public void MoveAndCleanCommandHandler_ShouldCallClean()
+        public void HandleAsync_ShouldCallClean()
         {
             // Arrange
             int steps = 3;
@@ -108,5 +108,8 @@ namespace OrcProto.UnitTests
             act.Should().NotThrow();
             cleanMethod.MustHaveHappened(steps, Times.Exactly);
         }
+
+
+
     }
 }
