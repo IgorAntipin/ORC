@@ -10,7 +10,7 @@ namespace OrcProto
 {
 	class Program
 	{
-		static async Task Main(string[] args)
+		static async Task<int> Main(string[] args)
 		{
 			ConfigureLogger();
 
@@ -22,10 +22,12 @@ namespace OrcProto
 			{
 				var app = serviceProvider.GetService<IOrcApp>();
 				await app.StartAsync(Console.In, Console.Out);
+				return 0;
 			}
 			catch (Exception ex)
 			{
 				Log.Fatal(ex, "ORC Proto crushed due to a critical error.");
+				return 1;
 			}
 			finally
 			{

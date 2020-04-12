@@ -45,7 +45,6 @@ namespace Orc.Infrastructure.Components
 				throw new ArgumentNullException(nameof(instruction));
 
 			await ExecuteAsync(instruction);
-
 		}
 
 		public async Task<bool> RunJobAsync(IRobotJob job)

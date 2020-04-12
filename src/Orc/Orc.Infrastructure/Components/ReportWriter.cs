@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Orc.Infrastructure.Components
 {
+	/// <summary>
+	/// Report writer processing reports IReportCommand
+	/// </summary>
 	public class ReportWriter : IReportWriter
 	{
 		private readonly IProcessor _processor;
@@ -25,18 +28,18 @@ namespace Orc.Infrastructure.Components
 
 		public async Task WriteAsync(IRobotResponse report)
 		{
+			if (report == null)
+				throw new ArgumentNullException(nameof(report));
+
 			if(_textWriter == null)
 				throw new NullReferenceException($"Failed to write a report. TextWriter is null.");
 
-			var command = report as ICommand;
-			if(command != null)
+			var reportCommand = report as IReportCommand;
+			if(reportCommand != null)
 			{
-				await _processor.ExecuteAsync(command);
+				reportCommand.TextWriter = _textWriter;
+				await _processor.ExecuteAsync(reportCommand);
 			}
-
-			await Task.CompletedTask;
-
-			
 		}
 	}
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Orc.Infrastructure.Interfaces
 {
-	public interface IJobStore
-	{
-		Task AddJobAsync(IRobotJob job);
+	//public interface IJobStore
+	//{
+	//	Task AddJobAsync(IRobotJob job);
 
-		Task<IRobotJob> GetNextJobAsync();
+	//	Task<IRobotJob> GetNextJobAsync();
 
-	}
+	//}
 }

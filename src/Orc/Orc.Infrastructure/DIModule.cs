@@ -51,17 +51,17 @@ namespace Orc.Infrastructure
 			
 			if(IsTest == false)
 			{
-				builder.RegisterType<ControllerFacade>()
-					.As<IControllerFacade>()
-					.SingleInstance();
-
-				builder.RegisterType<SimpleNavigationService>()
-					.As<INavigationService>()
+				builder.RegisterType<InMemoryRobotStore>()
+					.As<IRobotStore>()
 					.SingleInstance();
 			}
 
-			builder.RegisterType<InMemoryRobotStore>()
-				.As<IRobotStore>()
+			builder.RegisterType<ControllerFacade>()
+				.As<IControllerFacade>()
+				.SingleInstance();
+
+			builder.RegisterType<SimpleNavigationService>()
+				.As<INavigationService>()
 				.SingleInstance();
 
 			builder.RegisterGeneric(typeof(QueryHandlerBase<,>))
@@ -72,8 +72,11 @@ namespace Orc.Infrastructure
 			builder.RegisterAssemblyTypes(typeof(TestCommandHandler).Assembly)
 				.AsClosedTypesOf(typeof(CommandHandlerBase<>));
 
-			builder.RegisterAssemblyTypes(typeof(TestCommand).Assembly)
+			if (IsTest == true)
+			{
+				builder.RegisterAssemblyTypes(typeof(TestCommand).Assembly)
 				.As<ICommand>();
+			}
 
 			builder.RegisterAssemblyTypes(typeof(JobReportQueryHandler).Assembly)
 				.AsClosedTypesOf(typeof(QueryHandlerBase<,>));

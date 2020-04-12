@@ -11,6 +11,9 @@ using OrcProto.App;
 using Serilog;
 using System.IO;
 using System.Threading.Tasks;
+using Orc.Infrastructure.Services;
+using Orc.Common.Types;
+using Autofac;
 
 namespace OrcProto.IntegrationTests
 {
@@ -211,6 +214,90 @@ namespace OrcProto.IntegrationTests
 			act.Should().NotThrow();
 		}
 
+		public class InputOutputTestCase
+		{
+			public string Input { get; set; }
+			public string ExpectedOutput { get; set; }
+			public int ExpectedCount { get; set; }
+
+			public InputOutputTestCase(string[] inputs, int count)
+			{
+				StringBuilder inputSB = new StringBuilder();
+				foreach (var str in inputs)
+					inputSB.AppendLine(str);
+				Input = inputSB.ToString();
+				ExpectedCount = count;
+				ExpectedOutput = $"=> Cleaned: {count}\r\n";
+			}
+		}
+
+		public static IEnumerable<InputOutputTestCase> InputOutputTestCases()
+		{
+			yield return new InputOutputTestCase(new string[] 
+			{
+				"2",
+				"10 22",
+				"E 2",
+				"N 1"
+			}, 4);
+
+			yield return new InputOutputTestCase(new string[]
+			{
+				"0",
+				"100000 -100000",
+			}, 1);
+
+			yield return new InputOutputTestCase(new string[]
+			{
+				"2",
+				"50 -100000",
+				"N 100000",
+				"S 100000"
+			}, 100001);
+			yield return new InputOutputTestCase(new string[]
+			{
+				"2",
+				"0 100000",
+				"S 100000",
+				"S 100000"
+			}, 200001);
+		}
+
+		[Test, TestCaseSource("InputOutputTestCases")]
+		public void StartAsync_WhenInputContainsValidInstructions_ShouldWriteCorrectOutput(InputOutputTestCase testCase)
+		{
+			// Arrange
+			string output = null;
+
+			StringBuilder outputSB = new StringBuilder();
+
+			_textReader = new StringReader(testCase.Input);
+			_textWriter = new StringWriter(outputSB);
+
+			IRobotStore inMemoryStore = new InMemoryRobotStore(Vector2d.ZERO);
+
+			var container = ContainerConfig.GetContainer(true, (builder) =>
+			{
+				builder.RegisterInstance(inMemoryStore).As<IRobotStore>().SingleInstance();
+			});
+
+			var serviceProvider = new AutofacServiceProvider(container);
+
+			IOrcApp app = serviceProvider.GetService<IOrcApp>();
+
+			// Act
+			Func<Task> act = async () =>
+			{
+				await app.StartAsync(_textReader, _textWriter);
+				
+				output = outputSB.ToString();
+			};			
+
+			// Assert
+			act.Should().NotThrow();
+			output.Should().NotBeNull()
+				.And.Be(testCase.ExpectedOutput);
+		}
 
 	}
 }

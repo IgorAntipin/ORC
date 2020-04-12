@@ -1,5 +1,5 @@
-﻿using Orc.Domain.Entities;
-using Orc.Domain.Interfaces;
+﻿using Orc.Domain.Interfaces;
+using Orc.Domain.Jobs;
 using Orc.Domain.RobotInstructions;
 using Orc.Infrastructure.Commands;
 using Orc.Infrastructure.Interfaces;
@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace Orc.Infrastructure.Components
 {
+	/// <summary>
+	/// Can read from given text reader and build a Cleaning job
+	/// </summary>
 	public class CleaningJobBuilder : IRobotJobBuilder
 	{
 		private readonly IProcessor _processor;
@@ -27,6 +30,10 @@ namespace Orc.Infrastructure.Components
 			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
+		/// <summary>
+		/// Build a cleaning job
+		/// </summary>
+		/// <returns></returns>
 		public async Task<IRobotJob> BuildAsync()
 		{
 			if (_textReader == null)
@@ -35,8 +42,6 @@ namespace Orc.Infrastructure.Components
 			int totalCount = 1;
 			var instructionCount = await GetCountInstruction();
 
-			if (instructionCount == 0)
-				throw new InvalidOperationException("Failed to get count instruction.");
 			totalCount += instructionCount;
 
 			var queue = new Queue<IInstruction>(totalCount);
@@ -53,10 +58,13 @@ namespace Orc.Infrastructure.Components
 			_logger.Debug($"Id: '{job.Id}'.");
 			_logger.Debug($"Instructions count: '{job.Instructions.Count}'.");
 
-
 			return job;
 		}
 
+		/// <summary>
+		/// Set TextReader as input data source
+		/// </summary>
+		/// <param name="textReader"></param>
 		public void UseReader(TextReader textReader)
 		{
 			_textReader = textReader ?? throw new ArgumentNullException(nameof(textReader));
@@ -65,7 +73,7 @@ namespace Orc.Infrastructure.Components
 		private IRobotJob CreateJob()
 		{
 			var job = new RobotJob();
-			job.Id = new Guid();
+			job.Id = Guid.NewGuid();
 			
 			return job;				 
 		}

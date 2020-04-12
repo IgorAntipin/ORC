@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 namespace OrcProto.UnitTests
 {
 	[TestFixture]
-	public class QueryHandlersUT
+	public class JobReportQueryHandlerUT
 	{
 
         [Test]
-        public void Ctor_JobReportQueryHandler_WhenRobotStoreNull_ShouldThrow()
+        public void Ctor_WhenRobotStoreNull_ShouldThrow()
         {
             // Arrange
             IRobotStore robotStore = null;
@@ -34,7 +34,7 @@ namespace OrcProto.UnitTests
         }
 
         [Test]
-        public void Ctor_JobReportQueryHandler_WhenArgumentsNotNull_ShouldNotThrow()
+        public void Ctor_WhenArgumentsNotNull_ShouldNotThrow()
         {
             // Arrange
             IRobotStore robotStore = A.Fake<IRobotStore>();
@@ -52,7 +52,7 @@ namespace OrcProto.UnitTests
         }
 
         [Test]
-        public void JobReportQueryHandler_ShouldCreateJobReportResponse()
+        public void HandleQueryAsync_ShouldCreateJobReportResponse()
         {
             // Arrange
             JobReportResponse response = null;
@@ -74,7 +74,7 @@ namespace OrcProto.UnitTests
         }
 
         [Test]
-        public void JobReportQueryHandler_ShouldGetCountFromRobotStore()
+        public void HandleQueryAsync_ShouldReturnCountFromRobotStore()
         {
             // Arrange
             int count = 10;

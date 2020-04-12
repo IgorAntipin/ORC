@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Orc.Domain.Entities
+namespace Orc.Domain.Jobs
 {
 	public class RobotJob : IRobotJob
 	{
