@@ -12,5 +12,6 @@ namespace Orc.Infrastructure.Queries
 		public Type ResultType { get { return typeof(TResult); } }
 
 		public TextReader Reader { get; set; }
+
 	}
 }

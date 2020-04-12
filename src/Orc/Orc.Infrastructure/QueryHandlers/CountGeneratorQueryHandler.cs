@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Orc.Infrastructure.QueryHandlers
 {
-	public class CountGeneratorQueryHandler : QueryHandlerBase<CountGeneratorQuery, CountInstruction>
+	public class CountGeneratorQueryHandler : QueryHandlerBase<CountGeneratorQuery, int>
 	{
-		public async override Task<CountInstruction> HandleQueryAsync(CountGeneratorQuery query)
+		public async override Task<int> HandleQueryAsync(CountGeneratorQuery query)
 		{
 			var str = await ReadInputAsync(query);
 			if (!ValidateInputString(str))
@@ -34,18 +34,14 @@ namespace Orc.Infrastructure.QueryHandlers
 			return true;
 		}
 
-		private CountInstruction Parse(string input)
+		private int Parse(string input)
 		{
 			if (int.TryParse(input, out int count))
 			{
-				var instruction = new CountInstruction()
-				{
-					Count = count
-				};
-				return instruction;
+				return count;
 			}
 
-			return null;
+			return 0;
 		}
 	}
 }

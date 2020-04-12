@@ -23,7 +23,7 @@ namespace Orc.Infrastructure.Components
 			_textWriter = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
 		}
 
-		public async Task WriteAsync(IRobotReport report)
+		public async Task WriteAsync(IRobotResponse report)
 		{
 			if(_textWriter == null)
 				throw new NullReferenceException($"Failed to write a report. TextWriter is null.");

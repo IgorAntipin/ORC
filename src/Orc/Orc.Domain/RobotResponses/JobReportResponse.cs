@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Orc.Domain.Reports
+namespace Orc.Domain.RobotResponses
 {
-	public class JobReport : IRobotReport
+	public class JobReportResponse : IRobotResponse
 	{
 		/// <summary>
 		/// Number of unique cleaned vertices

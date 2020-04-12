@@ -7,59 +7,86 @@ using System.Threading.Tasks;
 
 namespace Orc.Infrastructure.Components
 {
+	/// <summary>
+	/// Robot with processor
+	/// </summary>
 	public class Robot : IRobot
 	{
 		private readonly IProcessor _processor;
-		private readonly IJobStore _jobStore;
 
 		public Robot(IProcessor processor)
 		{
 			_processor = processor ?? throw new ArgumentNullException(nameof(processor));
 		}
 
-		public async Task<bool> AddJobAsync(IRobotJob job)
+		public async Task<TResponse> ProcessRequestAsync<TResponse>(IRobotRequest<TResponse> request) 
+			where TResponse : IRobotResponse
 		{
-			await _jobStore.AddJobAsync(job);
-
-			return true;
-		}
-
-		public async Task RunAllJobsAsync()
-		{
-			var job = await _jobStore.GetNextJobAsync();
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
 			
-			while(job != null)
+			if (request is IRobotQueryRequest<TResponse>)
 			{
-				await RunJobAsync(job);
+				var queryableReq = request as IRobotQueryRequest<TResponse>;
 				
-				job = await _jobStore.GetNextJobAsync();
-			}			
+				if (queryableReq.Query == null)
+					throw new NullReferenceException($"Invalid reportQuery. Query is null.");
+
+				var response = await _processor.ExecuteAsync(queryableReq.Query);
+				return response;
+			}
+
+			throw new NotImplementedException($"Failed to process request. Unknown request type '{request.GetType()}'.");
 		}
 
-		public async Task<IRobotReport> RunInstructionAsync(IRobotInstruction instruction)
+		public async Task RunInstructionAsync(IInstruction instruction)
 		{
-			await Task.CompletedTask;
+			if (instruction == null)
+				throw new ArgumentNullException(nameof(instruction));
 
-			return null;
+			await ExecuteAsync(instruction);
+
 		}
 
-
-		private async Task RunJobAsync(IRobotJob job)
+		public async Task<bool> RunJobAsync(IRobotJob job)
 		{
-			while(job.Instructions.Count > 0)
+			if (job == null)
+				throw new ArgumentNullException(nameof(job));
+
+			bool success = true;
+
+			while (job.Instructions.Count > 0)
 			{
 				var instruction = job.Instructions.Dequeue();
-				var report = await RunInstructionAsync(instruction);
+				if (instruction == null)
+					throw new NullReferenceException($"Failed to complete job. Instruction is null.");
+
+				await ExecuteAsync(instruction);
 			}
+
+			return success;
 		}
 
-		private async Task<IRobotReport> ExecuteAsync(IRobotInstruction instruction)
+
+
+
+		private async Task ExecuteAsync(IInstruction instruction)
 		{
-			var query = instruction as IQuery<IRobotReport>;
-			
-			var result =  await _processor.ExecuteAsync(query);
+			if(instruction is ICommandInstruction)
+			{
+				var cmdInstruction = instruction as ICommandInstruction;
 
-			return result;
+				if (cmdInstruction.Command == null)
+					throw new NullReferenceException($"Failed to execute command instruction {cmdInstruction.GetType()}. Command is null.");
+				
+				await _processor.ExecuteAsync(cmdInstruction.Command);
+				return;
+			}
+
+			throw new NotImplementedException($"Failed to execute instruction. Unknown instruction type {instruction.GetType()}.");
 		}
+
+
+
 	}
 }

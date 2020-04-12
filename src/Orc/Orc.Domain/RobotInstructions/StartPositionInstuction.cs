@@ -1,14 +1,23 @@
 ﻿using Orc.Common.Types;
+using Orc.Domain.Commands;
 using Orc.Domain.Interfaces;
-using Orc.Domain.Reports;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Orc.Domain.RobotInstructions
 {
-	public class StartPositionInstuction : BaseRobotInstruction<StatusReport>
+	public class StartPositionInstuction : ICommandInstruction
 	{
-		public Vector2d AbsolutePosition { get; set; }
+		public StartPositionInstuction(Vector2d absolute, bool clean)
+		{
+			AbsolutePosition = absolute;
+			CleanInPosition = clean;
+		}
+		public Vector2d AbsolutePosition { get; }
+
+		public bool CleanInPosition { get; }
+
+		public ICommand Command => new Lazy<StartPositionCommand>(()=>new StartPositionCommand(AbsolutePosition, CleanInPosition)).Value;
 	}
 }

@@ -15,6 +15,6 @@ namespace Orc.Domain.Interfaces
 		/// <summary>
 		/// Queue of commands
 		/// </summary>
-		Queue<IRobotInstruction> Instructions { get; set; }
+		Queue<IInstruction> Instructions { get; set; }
 	}
 }

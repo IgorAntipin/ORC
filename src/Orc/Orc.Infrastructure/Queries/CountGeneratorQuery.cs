@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Orc.Infrastructure.Queries
 {
-	public class CountGeneratorQuery : InstructionGeneratorQuery<CountInstruction>
+	public class CountGeneratorQuery : InstructionGeneratorQuery<int>
 	{
 
 	}

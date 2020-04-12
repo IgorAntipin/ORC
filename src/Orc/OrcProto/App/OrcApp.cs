@@ -1,4 +1,5 @@
 ﻿using Orc.Domain.RobotInstructions;
+using Orc.Domain.RobotRequests;
 using Orc.Infrastructure.Interfaces;
 using Serilog;
 using System;
@@ -60,18 +61,16 @@ namespace OrcProto.App
 
 			_logger.Information("OrcApp robot deployment launched.");
 
-			await _robot.AddJobAsync(job);
-			await _robot.RunAllJobsAsync();
+			await _robot.RunJobAsync(job);
 
 			_logger.Information("OrcApp report generation started.");
 
-			var reportInstruction = new CreateJobReportInstruction();
-			reportInstruction.JobId = job.Id;
+			var request = new JobReportRequest(job.Id);
 
-			var report = await _robot.RunInstructionAsync(reportInstruction);
+			var response = await _robot.ProcessRequestAsync(request);
 
 			_reportWriter.UseTextWriter(writer);
-			await _reportWriter.WriteAsync(report);
+			await _reportWriter.WriteAsync(response);
 
 			_logger.Information("OrcApp all done.");
 		}

@@ -10,6 +10,6 @@ namespace Orc.Infrastructure.Interfaces
 	public interface IReportWriter
 	{
 		void UseTextWriter(TextWriter textWriter);
-		Task WriteAsync(IRobotReport report);
+		Task WriteAsync(IRobotResponse report);
 	}
 }

@@ -117,7 +117,7 @@ namespace OrcProto.IntegrationTests
 		}
 
 		[Test]
-		public void Ctor_WhenArgumentsNoNull_ShouldNotThrow()
+		public void Ctor_WhenArgumentsNoNull_ShouldInstanciateAndNotThrow()
 		{
 			// Arrange
 			IOrcApp app = null;

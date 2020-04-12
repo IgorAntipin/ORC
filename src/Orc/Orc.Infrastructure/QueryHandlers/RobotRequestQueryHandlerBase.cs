@@ -8,9 +8,8 @@ using System.Text;
 
 namespace Orc.Infrastructure.QueryHandlers
 {
-	public abstract class RobotInstructionQueryHandlerBase<TQuery, TResult> : QueryHandlerBase<TQuery, TResult>
-		where TQuery : BaseRobotInstruction<TResult> where TResult : IRobotReport
+	public abstract class RobotRequestQueryHandlerBase<TQuery, TResult> : QueryHandlerBase<TQuery, TResult>
+		where TQuery : class, IQuery<TResult> where TResult : IRobotResponse
 	{
-
 	}
 }

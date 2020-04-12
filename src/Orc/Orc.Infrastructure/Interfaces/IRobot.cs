@@ -7,12 +7,30 @@ using System.Threading.Tasks;
 namespace Orc.Infrastructure.Interfaces
 {
 	/// <summary>
-	/// Interface for Robot
+	/// Robot API
 	/// </summary>
 	public interface IRobot
 	{
-		Task<IRobotReport> RunInstructionAsync(IRobotInstruction instruction);
-		Task<bool> AddJobAsync(IRobotJob job);
-		Task RunAllJobsAsync();
+		/// <summary>
+		/// Executes single instruction
+		/// </summary>
+		/// <param name="instruction"></param>
+		/// <returns></returns>
+		Task RunInstructionAsync(IInstruction instruction);
+
+		/// <summary>
+		/// Executes all instuction from the job
+		/// </summary>
+		/// <param name="job"></param>
+		/// <returns></returns>
+		Task<bool> RunJobAsync(IRobotJob job);
+
+		/// <summary>
+		/// Executes request and return response
+		/// </summary>
+		/// <typeparam name="TResponse">Response type</typeparam>
+		/// <param name="request">request</param>
+		/// <returns>response</returns>
+		Task<TResponse> ProcessRequestAsync<TResponse>(IRobotRequest<TResponse> request) where TResponse : IRobotResponse;
 	}
 }

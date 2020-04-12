@@ -8,6 +8,6 @@ namespace Orc.Domain.Entities
 	public class RobotJob : IRobotJob
 	{
 		public Guid Id { get; set; }
-		public Queue<IRobotInstruction> Instructions { get; set; }
+		public Queue<IInstruction> Instructions { get; set; }
 	}
 }

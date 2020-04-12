@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8825AD34
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrcProto.IntegrationTests", "Tests\OrcProto.IntegrationTests\OrcProto.IntegrationTests.csproj", "{60D78CD9-590F-4EDD-9093-9044A041F0BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrcProto.UnitTests", "Tests\OrcProto.UnitTests\OrcProto.UnitTests.csproj", "{45A85299-2026-4975-A7E4-6F44E16ABE02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrcProto.UnitTests", "Tests\OrcProto.UnitTests\OrcProto.UnitTests.csproj", "{45A85299-2026-4975-A7E4-6F44E16ABE02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

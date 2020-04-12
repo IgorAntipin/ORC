@@ -1,7 +1,16 @@
 ﻿using Autofac;
+using Orc.Domain.Commands;
+using Orc.Domain.Interfaces;
+using Orc.Domain.Queries;
+using Orc.Domain.RobotInstructions;
+using Orc.Infrastructure.CommandHandlers;
+using Orc.Infrastructure.Commands;
 using Orc.Infrastructure.Components;
 using Orc.Infrastructure.Core;
 using Orc.Infrastructure.Interfaces;
+using Orc.Infrastructure.Queries;
+using Orc.Infrastructure.QueryHandlers;
+using Orc.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +22,8 @@ namespace Orc.Infrastructure
 	/// </summary>
 	public class DIModule : Module
 	{
+		public bool IsTest { get; set; }
+
 		/// <summary>
 		/// Register dependencies of the module
 		/// </summary>
@@ -37,6 +48,44 @@ namespace Orc.Infrastructure
 				.As<ICommandProcessor>()
 				.As<IProcessor>()
 				.InstancePerLifetimeScope();
+			
+			if(IsTest == false)
+			{
+				builder.RegisterType<ControllerFacade>()
+					.As<IControllerFacade>()
+					.SingleInstance();
+
+				builder.RegisterType<SimpleNavigationService>()
+					.As<INavigationService>()
+					.SingleInstance();
+			}
+
+			builder.RegisterType<InMemoryRobotStore>()
+				.As<IRobotStore>()
+				.SingleInstance();
+
+			builder.RegisterGeneric(typeof(QueryHandlerBase<,>))
+				.As(typeof(CommandHandlerBase<>))
+				.As(typeof(IQueryHandler<>))
+				.InstancePerDependency();
+			
+			builder.RegisterAssemblyTypes(typeof(TestCommandHandler).Assembly)
+				.AsClosedTypesOf(typeof(CommandHandlerBase<>));
+
+			builder.RegisterAssemblyTypes(typeof(TestCommand).Assembly)
+				.As<ICommand>();
+
+			builder.RegisterAssemblyTypes(typeof(JobReportQueryHandler).Assembly)
+				.AsClosedTypesOf(typeof(QueryHandlerBase<,>));
+
+			builder.RegisterAssemblyTypes(typeof(CountGeneratorQuery).Assembly)
+				.AsClosedTypesOf(typeof(IQuery<>));
+
+			builder.RegisterAssemblyTypes(typeof(JobReportQuery).Assembly)
+				.AsClosedTypesOf(typeof(IQuery<>));
+
+			builder.RegisterAssemblyTypes(typeof(StartPositionCommand).Assembly)
+				.As<ICommand>();
 
 			base.Load(builder);
 		}

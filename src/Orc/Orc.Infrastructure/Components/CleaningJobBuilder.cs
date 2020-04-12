@@ -32,20 +32,19 @@ namespace Orc.Infrastructure.Components
 			if (_textReader == null)
 				throw new NullReferenceException($"Failed to build a job. TextReader is null.");
 
-			int totalCount = 2;     //at least 1 count, 1 startPosition, 1 MoveAndClean instructions
-			var countInstruction = await GetCountInstruction();
+			int totalCount = 1;
+			var instructionCount = await GetCountInstruction();
 
-			if (countInstruction == null)
-				throw new NullReferenceException("Failed to get count instruction.");
-			totalCount += countInstruction.Count;
+			if (instructionCount == 0)
+				throw new InvalidOperationException("Failed to get count instruction.");
+			totalCount += instructionCount;
 
-			var queue = new Queue<IRobotInstruction>(totalCount);
-			queue.Enqueue(countInstruction);
+			var queue = new Queue<IInstruction>(totalCount);
 
 			var startPosition = await GetStartPositionInstruction();
 			queue.Enqueue(startPosition);
 
-			await PopulateMoveAndCleanInstructions(countInstruction.Count, queue);
+			await PopulateWithMoveAndCleanInstructions(instructionCount, queue);
 
 			var job = CreateJob();
 			job.Instructions = queue;
@@ -71,14 +70,14 @@ namespace Orc.Infrastructure.Components
 			return job;				 
 		}
 
-		private async Task<CountInstruction> GetCountInstruction()
+		private async Task<int> GetCountInstruction()
 		{
 			var query = new CountGeneratorQuery();
 			query.Reader = _textReader;
 
-			CountInstruction instruction = await _processor.ExecuteAsync(query);
+			int count = await _processor.ExecuteAsync(query);
 
-			return instruction;
+			return count;
 		}
 
 		private async Task<StartPositionInstuction> GetStartPositionInstruction()
@@ -91,7 +90,7 @@ namespace Orc.Infrastructure.Components
 			return instruction;
 		}
 
-		private async Task PopulateMoveAndCleanInstructions(int count, Queue<IRobotInstruction> queueToUpdate)
+		private async Task PopulateWithMoveAndCleanInstructions(int count, Queue<IInstruction> queueToUpdate)
 		{
 			var command = new MoveAndCleanGeneratorCommand();
 			command.Reader = _textReader;

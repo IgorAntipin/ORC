@@ -41,11 +41,14 @@ namespace Orc.Infrastructure.Core
 		public async Task<TResult> ExecuteAsync<TResult>(IQuery<TResult> query)
 		{
 			var queryType = query.GetType();
+			var expectedType = query.ResultType;
 			var returnType = typeof(TResult);
+			if (!returnType.IsAssignableFrom(expectedType))
+				throw new InvalidCastException($"Cannot cast expected type '{expectedType.Name}' of the query to the return type'{returnType.Name}'");
 
-			var args = new Type[] { queryType, returnType };
+			var args = new Type[] { queryType, expectedType };
 			Type handlerType = typeof(QueryHandlerBase<,>).MakeGenericType(args);
-			Type handlerReturnType = typeof(Task<>).MakeGenericType(returnType);
+			Type handlerReturnType = typeof(Task<>).MakeGenericType(expectedType);
 
 			var methods = handlerType.GetMethods();
 			var handleMethod = methods.FirstOrDefault(m => m.Name == "HandleAsync" && m.ReturnType.FullName == handlerReturnType.FullName);

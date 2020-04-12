@@ -32,6 +32,12 @@ namespace Orc.Common
 			W
 		}
 
+		public enum RobotInstructionType
+		{
+			Command,
+			Query
+		}
+
 		public enum RobotInstructionStatus
 		{
 			Ok,
